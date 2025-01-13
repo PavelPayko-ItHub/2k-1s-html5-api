@@ -1,15 +1,14 @@
-// Проверка поддержки HTML5 API
 const checkApiSupport = () => {
   const features = {
     "File API": "File" in window,
     "FileReader API": "FileReader" in window,
-    LocalStorage: "localStorage" in window,
-    SessionStorage: "sessionStorage" in window,
+    "LocalStorage": "localStorage" in window,
+    "SessionStorage": "sessionStorage" in window,
     "Canvas API": "HTMLCanvasElement" in window,
     "Web Workers API": "Worker" in window,
     "Web Socket API": "WebSocket" in window,
     "Geolocation API": "geolocation" in navigator,
-    IndexedDB: "indexedDB" in window,
+    "IndexedDB": "indexedDB" in window,
     "Web Storage API": "Storage" in window,
     "History API": "history" in window && "pushState" in history,
     "Drag and Drop API": "draggable" in document.createElement("div"),
@@ -26,7 +25,6 @@ const checkApiSupport = () => {
 }
 
 const getLocation = () => {
-  // Если геолокация поддерживается браузером
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
@@ -39,10 +37,12 @@ const showPosition = (position) => {
   const lat = position.coords.latitude;
   const lon = position.coords.longitude;
 
-  document.getElementById("location").innerHTML =
-    "Текушие координаты: " + "<br>" + "Широта: " + lat + "<br>Долгота: " + lon;
-  const currentPosition = [{ name: "myLastgeo", pos: [lat, lon] }];
+  document
+    .getElementById("location")
+    .innerHTML =
+      "Текушие координаты: " + "<br>" + "Широта: " + lat + "<br>Долгота: " + lon;
 
+  const currentPosition = [{ name: "myLastgeo", pos: [lat, lon] }];
   localStorage.setItem("mygeoposition", JSON.stringify(currentPosition));
 
   const timestamp = new Date();
@@ -55,7 +55,6 @@ const saveLocation = (type, name, pos) => {
   localStorage.setItem(type, JSON.stringify(marker));
 }
 
-//  Создаем карту на странице
 const createMap = () => {
   const geolocation = ymaps.geolocation,
     myMap = new ymaps.Map(
@@ -77,13 +76,10 @@ const createMap = () => {
       mapStateAutoApply: true,
     })
     .then(function (result) {
-      // Красным цветом пометим положение, полученное через браузер.
-      // Если браузер не поддерживает эту функциональность, метка не будет добавлена на карту.
       result.geoObjects.options.set("preset", "islands#redCircleIcon");
       myMap.geoObjects.add(result.geoObjects);
     });
 
-  // Готовимся считать данные из поисковой строки
   document
     .getElementById("markerForm")
     .addEventListener("submit", function (event) {
@@ -113,11 +109,12 @@ const createMap = () => {
 
         function (err) {
           alert("Ошибка");
+          console.error(err)
         }
       );
     });
 
-  function showStored(type) {
+  const showSavedData = (type) => {
     const saved = JSON.parse(localStorage.getItem(type));
     for (const i in saved) {
       const marker = saved[i];
@@ -130,21 +127,15 @@ const createMap = () => {
     }
   }
 
-  showStored("markers");
+  showSavedData("markers");
   navigator.geolocation.getCurrentPosition(
     function(position){
-      //действия с полученными данными
     }, function(error){
-      // если ошибка (можно проверить код ошибки)
       if(error.PERMISSION_DENIED){
-        showStored("mygeoposition");
+        showSavedData("mygeoposition");
       }
-  });
-
-
-    
+  });    
   }
-
 
 const deleteMarkers = () => {
   localStorage.removeItem("markers");

@@ -30,12 +30,8 @@ section:nth-child(2) {
   background: #e0d6e9;
 }
 section:nth-child(3) {
-  color: #bc5f4a;
+  color: #eb846d;
 }
-/*section:nth-child(4) {
-  color: #301934;
-  background: #e0d6e9;
-}*/
 section .container {
   margin: 100px;
   text-align: center;
@@ -63,6 +59,12 @@ section .text-container .text-box h3 {
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 10px;
+}
+
+section.api_section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 @media (max-width: 900px) {
